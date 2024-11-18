@@ -1,10 +1,16 @@
+import { prisma } from "@/lib/prisma";
+
 interface DashboardPageProps {
-  params: Promise<{ storeId: string }>;
+  params: { storeId: string };
 }
 
 const DashboardPage = async ({ params }: DashboardPageProps) => {
-  const storeId = (await params).storeId;
-  return <div>Dashboard Content {storeId}</div>;
+  const store = await prisma.store.findFirst({
+    where: {
+      id: params.storeId,
+    },
+  });
+  return <div>Dashboard Content {store?.name}</div>;
 };
 
 export default DashboardPage;
