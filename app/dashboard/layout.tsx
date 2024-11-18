@@ -1,4 +1,6 @@
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/sonner";
+import { ModalProviders } from "@/module/providers/modal-provider";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
@@ -10,5 +12,11 @@ export default async function DashboardLayout({
   if (!session) {
     redirect("/sign-in");
   }
-  return <>{children}</>;
+  return (
+    <>
+      <Toaster />
+      <ModalProviders />
+      {children}
+    </>
+  );
 }
