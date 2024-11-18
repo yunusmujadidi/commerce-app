@@ -42,6 +42,7 @@ export const StoreForm = () => {
       console.log(result.message);
       setLoading(false);
       onClose();
+      window.location.assign(`/dashboard/${result.result?.id}`);
       toast.success(result?.message);
     } else {
       toast.error(result.error);
