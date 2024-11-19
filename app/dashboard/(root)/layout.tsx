@@ -1,7 +1,5 @@
 import { auth } from "@/auth";
-import { Toaster } from "@/components/ui/sonner";
 import { prisma } from "@/lib/prisma";
-import { ModalProviders } from "@/module/providers/modal-provider";
 import { redirect } from "next/navigation";
 export default async function SetupLayout({
   children,
@@ -23,11 +21,5 @@ export default async function SetupLayout({
     redirect(`/dashboard/${store.id}`);
   }
 
-  return (
-    <>
-      <Toaster />
-      <ModalProviders />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
