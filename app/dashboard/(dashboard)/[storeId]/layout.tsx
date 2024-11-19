@@ -1,8 +1,9 @@
-// app/dashboard/(dashboard)/[storeId]/layout.tsx
-import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { prisma } from "@/lib/prisma";
 
+import { AppSidebar } from "@/components/app-sidebar";
 interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{ storeId: string }>;
@@ -33,8 +34,11 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <div>navbar</div>
-      {children}
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarTrigger />
+        {children}
+      </SidebarProvider>
     </>
   );
 }
