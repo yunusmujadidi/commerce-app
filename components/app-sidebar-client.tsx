@@ -23,55 +23,62 @@ import {
   StoreIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { StoreSwitcher } from "./store-switch";
-import { Store } from "@prisma/client";
+import { Store, User } from "@prisma/client";
+import { UserMenu } from "./user-menu";
 
-const items = [
-  {
-    title: "Overview",
-    url: "/dashboard/${store.id}",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Billboards",
-    url: "/dashboard/${store.id}/billboards",
-    icon: GalleryVertical,
-  },
-  {
-    title: "Categories",
-    url: "/dashboard/${store.id}/categories",
-    icon: Library,
-  },
-  {
-    title: "Sizes",
-    url: "/dashboard/${store.id}/sizes",
-    icon: Scaling,
-  },
-  {
-    title: "Colors",
-    url: "/dashboard/${store.id}/colors",
-    icon: Palette,
-  },
-  {
-    title: "Products",
-    url: "/dashboard/${store.id}/products",
-    icon: ShoppingBag,
-  },
-  {
-    title: "Orders",
-    url: "/dashboard/${store.id}/orders",
-    icon: ShoppingCart,
-  },
-  {
-    title: "Settings",
-    url: "/dashboard/${store.id}/settings",
-    icon: Settings,
-  },
-];
-
-export function AppSidebarClient({ stores = [] }: { stores: Store[] }) {
+export function AppSidebarClient({
+  stores = [],
+  user,
+}: {
+  stores: Store[];
+  user?: User;
+}) {
   const pathname = usePathname();
+  const params = useParams();
+  const items = [
+    {
+      title: "Overview",
+      url: `/dashboard/${params.storeId}`,
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Billboards",
+      url: `/dashboard/${params.storeId}/billboards`,
+      icon: GalleryVertical,
+    },
+    {
+      title: "Categories",
+      url: `/dashboard/${params.storeId}/categories`,
+      icon: Library,
+    },
+    {
+      title: "Sizes",
+      url: `/dashboard/${params.storeId}/sizes`,
+      icon: Scaling,
+    },
+    {
+      title: "Colors",
+      url: `/dashboard/${params.storeId}/colors`,
+      icon: Palette,
+    },
+    {
+      title: "Products",
+      url: `/dashboard/${params.storeId}/products`,
+      icon: ShoppingBag,
+    },
+    {
+      title: "Orders",
+      url: `/dashboard/${params.storeId}/orders`,
+      icon: ShoppingCart,
+    },
+    {
+      title: "Settings",
+      url: `/dashboard/${params.storeId}/settings`,
+      icon: Settings,
+    },
+  ];
   return (
     <Sidebar>
       <SidebarHeader>
@@ -84,7 +91,7 @@ export function AppSidebarClient({ stores = [] }: { stores: Store[] }) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-1">
               {items.map((item) => {
                 const isActive = pathname === item.url;
                 return (
@@ -92,9 +99,9 @@ export function AppSidebarClient({ stores = [] }: { stores: Store[] }) {
                     <SidebarMenuButton asChild isActive={isActive}>
                       <Link
                         className={cn(
-                          "text-sm font-medium transition-colors hover:text-primary text-black dark:text-white"
+                          "text-md font-medium transition-colors hover:text-primary text-black dark:text-white"
                         )}
-                        href={``}
+                        href={item.url}
                       >
                         <item.icon />
                         <span>{item.title}</span>
@@ -108,7 +115,7 @@ export function AppSidebarClient({ stores = [] }: { stores: Store[] }) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div>User Menu</div>
+        <UserMenu user={user} />
       </SidebarFooter>
     </Sidebar>
   );
