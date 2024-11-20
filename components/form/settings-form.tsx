@@ -33,7 +33,7 @@ const formSchema = z.object({
 export const SettingsForm = ({ initialData }: SettingFormProps) => {
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure?",
-    "You are about to delete this account."
+    "You are about to delete this store."
   );
   const router = useRouter();
   const [loading1, setLoading1] = useState(false);
@@ -102,6 +102,7 @@ export const SettingsForm = ({ initialData }: SettingFormProps) => {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
+                      className="w-auto md:w-full"
                       disabled={loading1}
                       placeholder="Store name"
                       {...field}
