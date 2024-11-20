@@ -24,7 +24,7 @@ export const createStore = async (values: { name: string }) => {
   }
 };
 
-export const getStore = async () => {
+export const getStores = async () => {
   const currentUser = await auth();
   if (!currentUser) {
     throw new Error("Unauthorized");
@@ -41,5 +41,79 @@ export const getStore = async () => {
   } catch (error) {
     console.log("Can't fetch store", error);
     return { success: false, error: "Failed to fetch store" };
+  }
+};
+
+export const getStore = async ({ storeId }: { storeId: string }) => {
+  const currentUser = await auth();
+  if (!currentUser) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    const result = await prisma.store.findFirst({
+      where: {
+        id: storeId,
+      },
+    });
+
+    return { success: true, result };
+  } catch (error) {
+    console.log("Can't fetch store", error);
+    return { success: false, error: "Failed to fetch stores" };
+  }
+};
+
+export const editStore = async ({
+  storeId,
+  name,
+}: {
+  storeId: string;
+  name: string;
+}) => {
+  const currentUser = await auth();
+  if (!currentUser) {
+    throw new Error("Unauhtorized");
+  }
+
+  try {
+    await prisma.store.updateMany({
+      where: {
+        id: storeId,
+        userId: currentUser.user?.id,
+      },
+      data: {
+        name,
+      },
+    });
+
+    return { sucess: true, message: `Success updated to ${name}` };
+  } catch (error) {
+    console.log("Cant update the store", error);
+    return { success: false, message: "Failed to fetch stores" };
+  }
+};
+
+export const deleteStores = async ({ storeId }: { storeId: string }) => {
+  const currentUser = await auth();
+  if (!currentUser) {
+    throw new Error("Unauhtorized");
+  }
+
+  try {
+    const result = await prisma.store.deleteMany({
+      where: {
+        id: storeId,
+        userId: currentUser.user?.id,
+      },
+    });
+
+    return {
+      sucess: true,
+      message: `Success deleted ${result.count} stores `,
+    };
+  } catch (error) {
+    console.log("Cant delete the store", error);
+    return { success: false, message: "Failed to delete the stores" };
   }
 };
