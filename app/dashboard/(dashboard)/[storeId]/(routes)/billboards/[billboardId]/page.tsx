@@ -11,7 +11,6 @@ const BillboardPage = async ({
       id: (await params).billboardId,
     },
   });
-  console.log("params = ", (await params).billboardId);
   return (
     <div className="flex flex-col w-full">
       <div className="space-y-4 p-8 pt-6">

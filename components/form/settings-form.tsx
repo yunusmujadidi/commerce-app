@@ -17,10 +17,10 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { deleteStores, editStore } from "@/module/actions/store-action";
+import { deleteStores, editStore } from "@/actions/store-action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useConfirm } from "@/module/hooks/use-confirm";
+import { useConfirm } from "@/hooks/use-confirm";
 
 interface SettingFormProps {
   initialData: Store;

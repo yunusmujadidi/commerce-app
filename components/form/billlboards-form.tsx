@@ -19,12 +19,12 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useParams, useRouter } from "next/navigation";
-import { useConfirm } from "@/module/hooks/use-confirm";
+import { useConfirm } from "@/hooks/use-confirm";
 import {
   createBillboard,
   deleteBillboards,
   editBillboard,
-} from "@/module/actions/billboard-action";
+} from "@/actions/billboard-action";
 import { ImageUpload } from "../image-upload";
 
 interface BillboardsForm {

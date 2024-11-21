@@ -1,5 +1,5 @@
 "use client";
-import { useStoreModal } from "@/module/hooks/use-store-modal";
+import { useStoreModal } from "@/hooks/use-store-modal";
 import { Store } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";

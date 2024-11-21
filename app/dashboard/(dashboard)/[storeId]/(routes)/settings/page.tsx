@@ -1,5 +1,5 @@
 import { SettingsForm } from "@/components/form/settings-form";
-import { getStore } from "@/module/actions/store-action";
+import { getStore } from "@/actions/store-action";
 import { redirect } from "next/navigation";
 
 interface SettingsPageProps {

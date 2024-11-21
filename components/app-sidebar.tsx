@@ -1,4 +1,4 @@
-import { getStores } from "@/module/actions/store-action";
+import { getStores } from "@/actions/store-action";
 import { AppSidebarClient } from "./app-sidebar-client";
 import { auth } from "@/auth";
 import { User } from "@prisma/client";

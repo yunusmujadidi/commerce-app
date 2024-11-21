@@ -1,5 +1,5 @@
 "use client";
-import { useStoreModal } from "@/module/hooks/use-store-modal";
+import { useStoreModal } from "@/hooks/use-store-modal";
 import { useEffect } from "react";
 import { toast } from "sonner";
 

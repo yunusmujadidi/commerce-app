@@ -15,10 +15,10 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 
-import { createStore } from "@/module/actions/store-action";
-import { useStoreModal } from "@/module/hooks/use-store-modal";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useStoreModal } from "@/hooks/use-store-modal";
+import { createStore } from "@/actions/store-action";
 
 const formSchema = z.object({
   name: z.string().min(3, "Use at least 3 character to name the store"),
