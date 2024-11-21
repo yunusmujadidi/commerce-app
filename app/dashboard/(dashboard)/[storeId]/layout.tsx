@@ -35,6 +35,7 @@ export default async function DashboardLayout({
   return (
     <>
       <SidebarProvider>
+        {/* TODO: add navbar */}
         <AppSidebar />
         {children}
       </SidebarProvider>
