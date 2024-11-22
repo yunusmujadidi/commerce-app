@@ -6,35 +6,30 @@ import { useParams, useRouter } from "next/navigation";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { CategoryColumnProps, columns } from "./column";
 import { DataTable } from "@/components/data-table";
+import { columns, SizeColumnProps } from "./column";
 
-export const CategoryClient = ({
-  categories,
-}: {
-  categories: CategoryColumnProps[];
-}) => {
+export const SizeClient = ({ sizes }: { sizes: SizeColumnProps[] }) => {
   const params = useParams();
   const router = useRouter();
+  console.log("size adalah: ", sizes);
 
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Categories (${categories.length})`}
-          description="Manage your categories for your store"
+          title={`Sizes (${sizes.length})`}
+          description="Manage your sizes for your store"
         />
         <Button
-          onClick={() =>
-            router.push(`/dashboard/${params.storeId}/categories/new`)
-          }
+          onClick={() => router.push(`/dashboard/${params.storeId}/sizes/new`)}
         >
           <Plus className="mr-2 size-4" />
           Add New
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={categories} filterKey="name" />
+      <DataTable columns={columns} data={sizes} filterKey="name" />
     </>
   );
 };

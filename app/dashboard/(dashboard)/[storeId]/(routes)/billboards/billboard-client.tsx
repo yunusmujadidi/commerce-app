@@ -7,7 +7,7 @@ import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BillboardColumnProps, columns } from "./column";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table";
 
 export const BillboardsClient = ({
   billboards,
@@ -34,7 +34,7 @@ export const BillboardsClient = ({
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={billboards} searchKey="label" />
+      <DataTable columns={columns} data={billboards} filterKey="label" />
     </>
   );
 };

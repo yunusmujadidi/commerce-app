@@ -1,13 +1,11 @@
 "use server";
 
 import { auth } from "@/auth";
-import { categoryFormSchema } from "@/components/form/category-form";
+import { sizeFormSchema } from "@/components/form/size-form";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
-export const createCategory = async (
-  values: z.infer<typeof categoryFormSchema>
-) => {
+export const createSize = async (values: z.infer<typeof sizeFormSchema>) => {
   const currentUser = await auth();
   if (!currentUser) {
     return {
@@ -33,29 +31,26 @@ export const createCategory = async (
   }
 
   try {
-    const result = await prisma.category.create({
+    const result = await prisma.size.create({
       data: values,
     });
 
-    return { success: true, message: "Category created succesfully!", result };
+    return { success: true, message: "Size created succesfully!", result };
   } catch (error) {
-    console.log("Can't create category", error);
-    return { success: false, error: "Failed to create category" };
+    console.log("Can't create size", error);
+    return { success: false, error: "Failed to create size" };
   }
 };
 
-export const getCategories = async (storeId: string) => {
+export const getSizes = async (storeId: string) => {
   const currentUser = await auth();
   if (!currentUser) {
     throw new Error("Unauthorized");
   }
 
-  const result = await prisma.category.findMany({
+  const result = await prisma.size.findMany({
     where: {
       storeId,
-    },
-    include: {
-      billboard: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -65,28 +60,28 @@ export const getCategories = async (storeId: string) => {
   return result;
 };
 
-export const getCategory = async ({ categoryId }: { categoryId: string }) => {
+export const getSize = async ({ sizesId }: { sizesId: string }) => {
   const currentUser = await auth();
   if (!currentUser) {
     throw new Error("Unauthorized");
   }
 
   try {
-    const result = await prisma.category.findUnique({
+    const result = await prisma.size.findUnique({
       where: {
-        id: categoryId,
+        id: sizesId,
       },
     });
 
     return { success: true, result };
   } catch (error) {
-    console.log("Can't fetch category", error);
-    return { success: false, error: "Failed to fetch categories" };
+    console.log("Can't fetch sizes", error);
+    return { success: false, error: "Failed to fetch sizes" };
   }
 };
 
-export const editCategory = async (
-  values: z.infer<typeof categoryFormSchema> & { id: string }
+export const editSizes = async (
+  values: z.infer<typeof sizeFormSchema> & { id: string }
 ) => {
   const currentUser = await auth();
   if (!currentUser) {
@@ -108,24 +103,24 @@ export const editCategory = async (
   }
 
   try {
-    await prisma.category.updateMany({
+    await prisma.size.updateMany({
       where: {
         id: values.id,
       },
       data: {
         name: values.name,
-        billboardId: values.billboardId,
+        value: values.value,
       },
     });
 
-    return { success: true, message: `Successfully updated the category` };
+    return { success: true, message: `Successfully updated the sizes` };
   } catch (error) {
-    console.log("Can't update the category", error);
-    return { success: false, message: "Failed to update category" };
+    console.log("Can't update the sizes", error);
+    return { success: false, message: "Failed to update sizes" };
   }
 };
 
-export const deleteCategories = async ({
+export const deleteSizes = async ({
   storeId,
   id,
 }: {
@@ -153,7 +148,7 @@ export const deleteCategories = async ({
   }
 
   try {
-    const result = await prisma.category.deleteMany({
+    const result = await prisma.size.deleteMany({
       where: {
         id,
       },
@@ -161,10 +156,12 @@ export const deleteCategories = async ({
 
     return {
       sucess: true,
-      message: `Success deleted ${result.count} categories `,
+      message: `Success deleted ${result.count} ${
+        result.count < 0 ? "sizes" : "size"
+      } `,
     };
   } catch (error) {
-    console.log("Cant delete the category", error);
-    return { success: false, message: "Failed to delete the categories" };
+    console.log("Cant delete the sizes", error);
+    return { success: false, message: "Failed to delete the sizes" };
   }
 };

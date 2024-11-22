@@ -25,13 +25,13 @@ import { Input } from "@/components/ui/input";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  searchKey: string;
+  filterKey: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  searchKey,
+  filterKey,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -54,9 +54,9 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center py-4">
         <Input
           placeholder="Search"
-          value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn(searchKey)?.setFilterValue(event.target.value)
+            table.getColumn(filterKey)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -113,10 +113,10 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+        {/* <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
+        </div> */}
         <div className="text-sm text-muted-foreground">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
