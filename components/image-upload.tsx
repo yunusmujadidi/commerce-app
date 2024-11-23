@@ -21,6 +21,7 @@ export const ImageUpload = ({
 }: ImageUploadProps) => {
   const isMounted = useMountedState();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onUpload = (result: any) => {
     onChange(result.info.secure_url);
   };

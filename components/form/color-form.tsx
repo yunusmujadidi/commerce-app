@@ -49,9 +49,6 @@ export const ColorForm = ({ initialData }: ColorFormProps) => {
   const title = initialData ? "Edit color" : "Create color";
   const description = initialData ? "Edit a color" : "Add a new color";
   const action = initialData ? "Save changes" : "Create color";
-  console.log("store params =", storeId);
-  console.log("color params =", colorId);
-  console.log("initial data =", initialData);
 
   const form = useForm<z.infer<typeof colorFormSchema>>({
     defaultValues: initialData || {

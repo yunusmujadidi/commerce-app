@@ -53,9 +53,6 @@ export const BillboardsForm = ({ initialData }: BillboardsForm) => {
   const title = initialData ? "Edit billboard" : "Create billboard";
   const description = initialData ? "Edit a billboard" : "Add a new billboard";
   const action = initialData ? "Save changes" : "Create billboard";
-  console.log("store params =", storeId);
-  console.log("billboard params =", billboardId);
-  console.log("initial data =", initialData);
 
   const form = useForm<z.infer<typeof billboardFormSchema>>({
     defaultValues: initialData || {

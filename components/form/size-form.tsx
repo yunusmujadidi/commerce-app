@@ -49,9 +49,6 @@ export const SizeForm = ({ initialData }: SizeFormProps) => {
   const title = initialData ? "Edit size" : "Create size";
   const description = initialData ? "Edit a size" : "Add a new size";
   const action = initialData ? "Save changes" : "Create size";
-  console.log("store params =", storeId);
-  console.log("size params =", sizeId);
-  console.log("initial data =", initialData);
 
   const form = useForm<z.infer<typeof sizeFormSchema>>({
     defaultValues: initialData || {

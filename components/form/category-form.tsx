@@ -60,9 +60,6 @@ export const CategoryForm = ({ initialData, billboards }: CategoryForm) => {
   const title = initialData ? "Edit category" : "Create category";
   const description = initialData ? "Edit a category" : "Add a new category";
   const action = initialData ? "Save changes" : "Create category";
-  console.log("store params =", storeId);
-  console.log("category params =", categoryId);
-  console.log("initial data =", initialData);
 
   const form = useForm<z.infer<typeof categoryFormSchema>>({
     defaultValues: initialData || {
