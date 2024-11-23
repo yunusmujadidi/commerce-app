@@ -71,7 +71,6 @@ export const CategoryForm = ({ initialData, billboards }: CategoryForm) => {
   });
 
   const onSubmit = (values: z.infer<typeof categoryFormSchema>) => {
-    console.log(values);
     if (initialData) {
       onEditSubmit(values);
     } else {
@@ -80,7 +79,6 @@ export const CategoryForm = ({ initialData, billboards }: CategoryForm) => {
   };
 
   const onCreateSubmit = async (values: z.infer<typeof categoryFormSchema>) => {
-    console.log("craeting category");
     setLoading1(true);
     const result = await createCategory(values);
     if (result.success) {
@@ -92,7 +90,6 @@ export const CategoryForm = ({ initialData, billboards }: CategoryForm) => {
       toast.error(result.error);
     }
     setLoading1(false);
-    console.log("craeting category", result?.result);
   };
 
   const onEditSubmit = async (values: z.infer<typeof categoryFormSchema>) => {

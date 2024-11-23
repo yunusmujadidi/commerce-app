@@ -21,7 +21,6 @@ const ProductPage = async ({
   const sizes = await getSizes((await params).storeId);
   const colors = await getColors((await params).storeId);
   const categories = await getCategories((await params).storeId);
-  console.log("ini initial data:", product);
 
   return (
     <div className="flex flex-col w-full">

@@ -64,7 +64,6 @@ export const BillboardsForm = ({ initialData }: BillboardsForm) => {
   });
 
   const onSubmit = (values: z.infer<typeof billboardFormSchema>) => {
-    console.log(values);
     if (initialData) {
       onEditSubmit(values);
     } else {
@@ -75,7 +74,7 @@ export const BillboardsForm = ({ initialData }: BillboardsForm) => {
   const onCreateSubmit = async (
     values: z.infer<typeof billboardFormSchema>
   ) => {
-    console.log("craeting billboard");
+    ("craeting billboard");
     setLoading1(true);
     const result = await createBillboard(values);
     if (result.success) {
@@ -87,7 +86,6 @@ export const BillboardsForm = ({ initialData }: BillboardsForm) => {
       toast.error(result.error);
     }
     setLoading1(false);
-    console.log("craeting billboard", result?.result);
   };
 
   const onEditSubmit = async (values: z.infer<typeof billboardFormSchema>) => {

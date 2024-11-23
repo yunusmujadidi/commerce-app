@@ -60,7 +60,6 @@ export const SizeForm = ({ initialData }: SizeFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof sizeFormSchema>) => {
-    console.log(values);
     if (initialData) {
       onEditSubmit(values);
     } else {
@@ -69,7 +68,6 @@ export const SizeForm = ({ initialData }: SizeFormProps) => {
   };
 
   const onCreateSubmit = async (values: z.infer<typeof sizeFormSchema>) => {
-    console.log("craeting size");
     setLoading1(true);
     const result = await createSize(values);
     if (result.success) {
@@ -81,7 +79,6 @@ export const SizeForm = ({ initialData }: SizeFormProps) => {
       toast.error(result.error);
     }
     setLoading1(false);
-    console.log("craeting size", result?.result);
   };
 
   const onEditSubmit = async (values: z.infer<typeof sizeFormSchema>) => {

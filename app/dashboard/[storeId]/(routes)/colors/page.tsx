@@ -15,8 +15,6 @@ const ColorsPage = async ({
     createdAt: format(item.createdAt, "MMMM dd, yyyy"),
   }));
 
-  console.log("Color: ", colors);
-
   return (
     <div className="flex-col w-full">
       <div className="flex-1 p-8 pt-6 space-y-4">

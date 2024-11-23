@@ -39,7 +39,6 @@ export const StoreForm = () => {
     setLoading(true);
     const result = await createStore(values);
     if (result?.success) {
-      console.log(result.message);
       setLoading(false);
       window.location.assign(`/dashboard/${result.result?.id}`);
       toast.success(result?.message);

@@ -8,7 +8,6 @@ const CategoriesPage = async ({
   params: Promise<{ storeId: string }>;
 }) => {
   const categories = await getCategories((await params).storeId);
-  console.log(categories);
   const formattedCategories = categories.map((item) => ({
     id: item.id,
     name: item.name,

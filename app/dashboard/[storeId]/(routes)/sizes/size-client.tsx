@@ -12,7 +12,6 @@ import { columns, SizeColumnProps } from "./column";
 export const SizeClient = ({ sizes }: { sizes: SizeColumnProps[] }) => {
   const params = useParams();
   const router = useRouter();
-  console.log("size adalah: ", sizes);
 
   return (
     <>

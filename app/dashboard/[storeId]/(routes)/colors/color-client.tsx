@@ -12,7 +12,6 @@ import { columns, ColorColumnProps } from "./column";
 export const ColorClient = ({ colors }: { colors: ColorColumnProps[] }) => {
   const params = useParams();
   const router = useRouter();
-  console.log("color adalah: ", colors);
 
   return (
     <>

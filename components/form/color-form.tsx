@@ -60,7 +60,6 @@ export const ColorForm = ({ initialData }: ColorFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof colorFormSchema>) => {
-    console.log(values);
     if (initialData) {
       onEditSubmit(values);
     } else {
@@ -69,7 +68,6 @@ export const ColorForm = ({ initialData }: ColorFormProps) => {
   };
 
   const onCreateSubmit = async (values: z.infer<typeof colorFormSchema>) => {
-    console.log("craeting color");
     setLoading1(true);
     const result = await createColor(values);
     if (result.success) {
@@ -81,7 +79,6 @@ export const ColorForm = ({ initialData }: ColorFormProps) => {
       toast.error(result.error);
     }
     setLoading1(false);
-    console.log("craeting color", result?.result);
   };
 
   const onEditSubmit = async (values: z.infer<typeof colorFormSchema>) => {

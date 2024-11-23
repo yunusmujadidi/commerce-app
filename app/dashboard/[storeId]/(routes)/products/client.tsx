@@ -16,7 +16,6 @@ export const ProductClient = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-  console.log("product adalah: ", products);
 
   return (
     <>

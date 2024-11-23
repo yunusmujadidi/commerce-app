@@ -8,7 +8,6 @@ const BillboardsPage = async ({
   params: Promise<{ storeId: string }>;
 }) => {
   const billboards = await getBillboards((await params).storeId);
-  console.log(billboards);
   const formattedBillboards = billboards.map((item) => ({
     id: item.id,
     label: item.label,
