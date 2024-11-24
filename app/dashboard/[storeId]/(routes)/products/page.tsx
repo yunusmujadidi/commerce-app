@@ -14,7 +14,7 @@ const ProductsPage = async ({
     price: item.price,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
-    createdAt: format(item.createdAt, "MMMM dd, yyyy"),
+    createdAt: format(item.createdAt, "dd MMMM yyyy"),
     color: item.color,
     size: item.size,
     category: item.category,
