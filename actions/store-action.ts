@@ -50,18 +50,13 @@ export const getStore = async ({ storeId }: { storeId: string }) => {
     throw new Error("Unauthorized");
   }
 
-  try {
-    const result = await prisma.store.findFirst({
-      where: {
-        id: storeId,
-      },
-    });
+  const result = await prisma.store.findFirst({
+    where: {
+      id: storeId,
+    },
+  });
 
-    return { success: true, result };
-  } catch (error) {
-    console.log("Can't fetch store", error);
-    return { success: false, error: "Failed to fetch stores" };
-  }
+  return result;
 };
 
 export const editStore = async ({
