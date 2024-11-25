@@ -1,6 +1,5 @@
 "use client";
 
-import { useMountedState } from "react-use";
 import { Button } from "./ui/button";
 import { ImagePlus, Trash } from "lucide-react";
 import Image from "next/image";
@@ -19,15 +18,10 @@ export const ImageUpload = ({
   onRemove,
   value,
 }: ImageUploadProps) => {
-  const isMounted = useMountedState();
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onUpload = (result: any) => {
     onChange(result.info.secure_url);
   };
-  if (!isMounted) {
-    return null;
-  }
 
   return (
     <div>

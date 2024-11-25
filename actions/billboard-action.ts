@@ -72,18 +72,13 @@ export const getBillboard = async ({
     throw new Error("Unauthorized");
   }
 
-  try {
-    const result = await prisma.billboard.findUnique({
-      where: {
-        id: billboardId,
-      },
-    });
+  const result = await prisma.billboard.findUnique({
+    where: {
+      id: billboardId,
+    },
+  });
 
-    return { success: true, result };
-  } catch (error) {
-    console.log("Can't fetch billboard", error);
-    return { success: false, error: "Failed to fetch billboards" };
-  }
+  return result;
 };
 
 export const editBillboard = async (

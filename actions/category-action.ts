@@ -71,18 +71,13 @@ export const getCategory = async ({ categoryId }: { categoryId: string }) => {
     throw new Error("Unauthorized");
   }
 
-  try {
-    const result = await prisma.category.findUnique({
-      where: {
-        id: categoryId,
-      },
-    });
+  const result = await prisma.category.findUnique({
+    where: {
+      id: categoryId,
+    },
+  });
 
-    return { success: true, result };
-  } catch (error) {
-    console.log("Can't fetch category", error);
-    return { success: false, error: "Failed to fetch categories" };
-  }
+  return result;
 };
 
 export const editCategory = async (

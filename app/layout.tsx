@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <Toaster />
         <ModalProviders />
-        <main>{children}</main>
+        {children}
       </body>
     </html>
   );

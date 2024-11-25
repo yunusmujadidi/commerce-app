@@ -16,6 +16,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "./ui/command";
+import { toast } from "sonner";
 
 interface StoreSwitcherProps {
   items?: Store[];
@@ -42,6 +43,7 @@ export const StoreSwitcher = ({
   const onStoreSelect = (store: { label: string; value: string }) => {
     setOpen(false);
     router.push(`/dashboard/${store.value}`);
+    toast.success(`Change to ${store.label} `);
   };
 
   return (
