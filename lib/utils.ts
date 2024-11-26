@@ -18,3 +18,8 @@ export const onCopy = (id: string) => {
   navigator.clipboard.writeText(id);
   toast.success("Copied to clipboard");
 };
+
+export const formatPrice = new Intl.NumberFormat("id-ID", {
+  style: "currency",
+  currency: "IDR",
+});

@@ -61,7 +61,10 @@ export const productFormSchema = z.object({
   sizeId: z.string().min(1, "Size is required"),
   categoryId: z.string().min(1, "Category is required"),
   storeId: z.string(),
-  images: z.object({ url: z.string() }).array(),
+  images: z
+    .object({ url: z.string() })
+    .array()
+    .min(1, "Need to upload images at least 1"),
 });
 
 export const ProductForm = ({ initialData, SelectProps }: ProductFormProps) => {

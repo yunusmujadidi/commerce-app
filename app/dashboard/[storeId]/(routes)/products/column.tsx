@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Switch } from "@/components/ui/switch";
 import { archivedToogle, featuredToogle } from "@/actions/product-action";
+import { formatPrice } from "@/lib/utils";
 
 export interface ProductColumnProps {
   id: string;
@@ -50,11 +51,7 @@ export const columns: ColumnDef<ProductColumnProps>[] = [
     accessorKey: "price",
     header: "Price",
     cell: ({ row }) => {
-      const formatter = new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-      });
-      return formatter.format(row.original.price);
+      return formatPrice.format(row.original.price);
     },
   },
 

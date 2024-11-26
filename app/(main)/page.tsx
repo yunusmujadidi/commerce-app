@@ -1,5 +1,8 @@
 import { Billboard } from "@/components/billboard";
 import { prisma } from "@/lib/prisma";
+import { Heading } from "@/components/heading";
+import { ProductList } from "@/components/product-list";
+
 interface HomeProps {
   params: { categoryId?: string };
 }
@@ -23,11 +26,29 @@ const Home = async ({ params }: HomeProps) => {
 
   const data = category?.billboard || (await fetchDefaultCategory())?.billboard;
 
-  if (!data) {
-    return;
-  }
+  if (!data) return;
 
-  return <Billboard data={data} />;
+  const products = await prisma.product.findMany({
+    include: {
+      images: true,
+      category: true,
+      color: true,
+      size: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return (
+    <>
+      <Billboard data={data} />
+      <div className="flex flex-col gap-y-8 px-4 md:px-6 mx-0 xl:mx-32">
+        <Heading title="Featured Products" className="mt-8" />
+        <ProductList products={products} />
+      </div>
+    </>
+  );
 };
 
 export default Home;
