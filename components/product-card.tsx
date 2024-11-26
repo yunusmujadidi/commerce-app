@@ -1,3 +1,5 @@
+"use client";
+
 import { Products } from "@/lib/types";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -9,12 +11,19 @@ import {
 } from "@/components/ui/card";
 import { Expand, ShoppingCart } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export const ProductCard = ({ data }: { data: Products }) => {
+  const router = useRouter();
   return (
-    <Card className="group hover:shadow-md transition-all duration-300 h-full flex flex-col">
-      <CardHeader className="p-0 relative bg-gray-100">
-        <div className="aspect-square rounded-t-xl relative overflow-hidden m-2">
+    <Card
+      className="group hover:shadow-md transition-all duration-300 h-full flex flex-col cursor-pointer"
+      onClick={() => {
+        router.push(`/product/${data.id}`);
+      }}
+    >
+      <CardHeader className="p-0 relative bg-gray-50">
+        <div className="aspect-square rounded-t-xl relative overflow-hidden m-4">
           <Image
             src={data.images[0].url}
             alt={data.name}

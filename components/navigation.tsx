@@ -21,6 +21,7 @@ const routeLabels: Record<string, string> = {
   colors: "Colors",
   orders: "Orders",
   settings: "Settings",
+  product: "Product Details",
 };
 
 export const Navigation = ({ store }: { store: Store }) => {
@@ -31,14 +32,36 @@ export const Navigation = ({ store }: { store: Store }) => {
 
   const getBreadcrumbItems = () => {
     const items = [
+      <BreadcrumbItem key="home">
+        <BreadcrumbLink asChild>
+          <Link href="/">Home</Link>
+        </BreadcrumbLink>
+      </BreadcrumbItem>,
+      <BreadcrumbSeparator key="sep1" />,
+    ];
+
+    if (segments[0] === "product") {
+      items.push(
+        <BreadcrumbItem key="products">
+          <BreadcrumbLink asChild>
+            <Link href="/products">Products</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>,
+        <BreadcrumbSeparator key="sep2" />,
+        <BreadcrumbItem key="product">
+          <BreadcrumbPage>Product Details</BreadcrumbPage>
+        </BreadcrumbItem>
+      );
+      return items;
+    }
+
+    items.push(
       <BreadcrumbItem key="dashboard">
         <BreadcrumbLink asChild>
           <Link href={`/dashboard/${store.id}`}>Dashboard</Link>
         </BreadcrumbLink>
       </BreadcrumbItem>,
-
-      <BreadcrumbSeparator key="sep1" />,
-
+      <BreadcrumbSeparator key="sep2" />,
       <BreadcrumbItem key="store">
         {segments.length === 2 ? (
           <BreadcrumbPage>{store.name}</BreadcrumbPage>
@@ -47,12 +70,12 @@ export const Navigation = ({ store }: { store: Store }) => {
             <Link href={`/dashboard/${store.id}`}>{store.name}</Link>
           </BreadcrumbLink>
         )}
-      </BreadcrumbItem>,
-    ];
+      </BreadcrumbItem>
+    );
 
     if (currentRoute) {
       items.push(
-        <BreadcrumbSeparator key="sep2" />,
+        <BreadcrumbSeparator key="sep3" />,
         <BreadcrumbItem key="route">
           {segments.length === 3 ? (
             <BreadcrumbPage>
@@ -70,7 +93,7 @@ export const Navigation = ({ store }: { store: Store }) => {
 
       if (segments.length > 3) {
         items.push(
-          <BreadcrumbSeparator key="sep3" />,
+          <BreadcrumbSeparator key="sep4" />,
           <BreadcrumbItem key="detail">
             <BreadcrumbPage>{isNew ? "Create New" : "Edit"}</BreadcrumbPage>
           </BreadcrumbItem>
