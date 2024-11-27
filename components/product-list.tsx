@@ -3,7 +3,6 @@ import { ProductCard } from "./product-card";
 import { Products } from "@/lib/types";
 
 export const ProductList = ({ products }: { products: Products[] }) => {
-  console.log("rpdocust adalaah:", products);
   return (
     <>
       {products.length === 0 && <NoResult />}

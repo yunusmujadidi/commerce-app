@@ -1,11 +1,22 @@
+"use client";
+
 import { ShoppingBag } from "lucide-react";
 import { Button } from "./ui/button";
+import { useCart } from "@/hooks/use-cart";
+import { useRouter } from "next/navigation";
 
 export const NavbarActions = () => {
+  const { items } = useCart();
+  const router = useRouter();
   return (
-    <Button className="rounded-full hover:opacity-90">
+    <Button
+      onClick={() => {
+        router.push("/cart");
+      }}
+      className="rounded-full hover:opacity-90"
+    >
       <ShoppingBag className="size-4 mr-1" />
-      (2)
+      {items.length}
     </Button>
   );
 };

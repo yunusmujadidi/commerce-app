@@ -13,10 +13,12 @@ import { Expand, ShoppingCart } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { usePreviewModal } from "@/hooks/use-preview-modal";
+import { useCart } from "@/hooks/use-cart";
 
 export const ProductCard = ({ data }: { data: Products }) => {
   const router = useRouter();
   const { onOpen } = usePreviewModal();
+  const { addItem } = useCart();
   return (
     <Card
       className="group hover:shadow-md transition-all duration-300 h-full flex flex-col cursor-pointer"
@@ -46,6 +48,10 @@ export const ProductCard = ({ data }: { data: Products }) => {
                 <Expand className="size-5 text-gray-600" />
               </Button>
               <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addItem(data);
+                }}
                 variant="outline"
                 size="icon"
                 className="rounded-full size-8 bg-white hover:bg-gray-50 hover:scale-110"

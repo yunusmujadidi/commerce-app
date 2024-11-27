@@ -1,7 +1,10 @@
+"use client";
+
 import { formatPrice } from "@/lib/utils";
 import { Color, Product, Size } from "@prisma/client";
 import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
 
 interface InfoProps extends Product {
   size: Size;
@@ -9,6 +12,7 @@ interface InfoProps extends Product {
 }
 
 export const Info = ({ product }: { product: InfoProps }) => {
+  const { addItem } = useCart();
   return (
     <div>
       <h1 className="font-bold text-3xl text-gray-900">{product.name}</h1>
@@ -32,7 +36,12 @@ export const Info = ({ product }: { product: InfoProps }) => {
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">
-        <Button className="rounded-full flex items-center gap-x-2 hover:opacity-90">
+        <Button
+          className="rounded-full flex items-center gap-x-2 hover:opacity-90"
+          onClick={() => {
+            addItem(product);
+          }}
+        >
           Add to cart <ShoppingCart />
         </Button>
       </div>
