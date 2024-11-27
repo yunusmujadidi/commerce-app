@@ -12,9 +12,11 @@ import {
 import { Expand, ShoppingCart } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { usePreviewModal } from "@/hooks/use-preview-modal";
 
 export const ProductCard = ({ data }: { data: Products }) => {
   const router = useRouter();
+  const { onOpen } = usePreviewModal();
   return (
     <Card
       className="group hover:shadow-md transition-all duration-300 h-full flex flex-col cursor-pointer"
@@ -33,6 +35,10 @@ export const ProductCard = ({ data }: { data: Products }) => {
           <div className="opacity-0 group-hover:opacity-100 absolute transition w-full px-4 bottom-5 z-10">
             <div className="flex gap-x-2 justify-center">
               <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpen(data);
+                }}
                 variant="outline"
                 size="icon"
                 className="rounded-full size-8 bg-white hover:bg-gray-50 hover:scale-110"

@@ -1,12 +1,5 @@
-"use client";
-
-import { StoreModal } from "@/components/modal/store-modal";
+import { ModalClient } from "./modal-client";
 
 export const ModalProviders = () => {
-  return (
-    <>
-      <StoreModal />
-    </>
-  );
+  return <ModalClient />;
 };
-  
