@@ -15,7 +15,7 @@ export const Billboard = ({ data }: BillboardProps) => {
         height="300"
         className="w-full h-full object-cover "
       />
-      <div className="absolute text-white font-bold text-2xl md:text-3xl lg:text-4xl shadow-lg w-1/2 text-center tracking-tighter">
+      <div className="absolute text-black font-bold text-2xl md:text-3xl lg:text-4xl w-1/2 text-center tracking-tighter">
         {data.label}
       </div>
     </div>
