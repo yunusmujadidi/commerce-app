@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPrice } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 export interface OrderColumnProps {
@@ -28,10 +29,10 @@ export const columns: ColumnDef<OrderColumnProps>[] = [
   {
     accessorKey: "totalPrice",
     header: "Total Price",
-    cell: ({ row }) => `$${row.original.totalPrice}`,
+    cell: ({ row }) => formatPrice.format(row.original.totalPrice),
   },
   {
-    accessorKey: "createdAt",
-    header: "Date",
+    accessorKey: "isPaid",
+    header: "Paid",
   },
 ];

@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { checkout } from "@/actions/checkout-action";
 
 export const Summary = () => {
   const searchParams = useSearchParams();
@@ -27,32 +28,12 @@ export const Summary = () => {
     }
   }, [removeAll, searchParams]);
 
-  const onCheckout = async () => {
-    "use server";
-
+  const onCheckout = async (productIds: string[]) => {
     try {
-      const response = await fetch("/api/checkout_sessions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          items: items.map((item) => ({
-            id: item.id,
-          })),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        toast.error("Failed to initiate checkout.");
-      }
+      const url = await checkout(productIds);
+      window.location.href = url;
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to initiate checkout.");
+      console.error("Checkout error:", error);
     }
   };
 
@@ -67,7 +48,10 @@ export const Summary = () => {
         </div>
       </div>
 
-      <Button onClick={() => onCheckout()} className="rounded-full w-full mt-6">
+      <Button
+        onClick={() => onCheckout(items.map((item) => item.id))}
+        className="rounded-full w-full mt-6"
+      >
         Checkout
       </Button>
     </div>
