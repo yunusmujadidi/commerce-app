@@ -6,3 +6,8 @@ export interface Products extends Product {
   color: Color;
   size: Size;
 }
+
+export type Period = {
+  from?: string | Date;
+  to?: string | Date;
+};

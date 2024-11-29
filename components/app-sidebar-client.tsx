@@ -82,7 +82,7 @@ export function AppSidebarClient({
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex mb-10 items-center justify-center ">
+        <div className="flex p-6">
           <StoreIcon className="mr-2 size-4" />
           Commerce
         </div>

@@ -37,3 +37,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+// TODO: restyle the data table
+// TODO: dynamic caching on next js 15 "use cache" maybe
