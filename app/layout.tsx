@@ -39,4 +39,4 @@ export default function RootLayout({
 }
 
 // TODO: restyle the data table
-// TODO: dynamic caching on next js 15 "use cache" maybe
+// TODO: dynamic caching on next js 15 "use cache"

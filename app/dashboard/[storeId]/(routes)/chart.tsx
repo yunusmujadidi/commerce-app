@@ -46,7 +46,7 @@ export const Chart = ({ chartData }: { chartData: ChartData }) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className="w-full h-[350px]">
           <BarChart
             width={600}
             height={300}
@@ -67,7 +67,7 @@ export const Chart = ({ chartData }: { chartData: ChartData }) => {
               content={<ChartTooltipContent indicator="dashed" />}
               formatter={formatRupiah}
             />
-            <Bar dataKey="value" fill="var(--color-revenue)" radius={4} />
+            <Bar dataKey="value" fill="hsl(var(--chart-1))" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>

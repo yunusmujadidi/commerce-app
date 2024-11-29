@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Navigation } from "@/components/navigation";
 import { getSession } from "@/lib/get-session";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -36,16 +37,18 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <SidebarProvider>
-        <SidebarTrigger className="absolute md:hidden" />
-        <AppSidebar />
-        <div className="flex-col w-full">
-          <div className="flex-1 px-8 pt-6 space-y-4">
-            <Navigation store={store} />
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <SidebarProvider>
+          <SidebarTrigger className="absolute md:hidden" />
+          <AppSidebar />
+          <div className="flex-col w-full">
+            <div className="flex-1 px-8 pt-6 space-y-4">
+              <Navigation store={store} />
+            </div>
+            {children}
           </div>
-          {children}
-        </div>
-      </SidebarProvider>
+        </SidebarProvider>
+      </ThemeProvider>
     </>
   );
 }

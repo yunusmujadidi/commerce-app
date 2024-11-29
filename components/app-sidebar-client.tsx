@@ -27,6 +27,7 @@ import { useParams, usePathname } from "next/navigation";
 import { StoreSwitcher } from "./store-switch";
 import { Store, User } from "@prisma/client";
 import { UserMenu } from "./user-menu";
+import { ThemeToggle } from "./theme-toggle";
 
 export function AppSidebarClient({
   stores = [],
@@ -82,9 +83,12 @@ export function AppSidebarClient({
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex p-6">
-          <StoreIcon className="mr-2 size-4" />
-          Commerce
+        <div className="flex justify-between p-6">
+          <div className="flex items-center">
+            <StoreIcon className="mr-2 size-4" />
+            Commerce
+          </div>
+          <ThemeToggle />
         </div>
         <StoreSwitcher items={stores} />
       </SidebarHeader>
