@@ -1,8 +1,8 @@
 "use server";
 
 import { auth } from "@/auth";
-import { orderFormSchema } from "@/components/form/billlboards-form";
 import { prisma } from "@/lib/prisma";
+import { orderFormSchema } from "@/lib/types";
 import { z } from "zod";
 
 export const createOrder = async (values: z.infer<typeof orderFormSchema>) => {
@@ -84,47 +84,6 @@ export const getOrder = async ({ orderId }: { orderId: string }) => {
   } catch (error) {
     console.log("Can't fetch order", error);
     return { success: false, error: "Failed to fetch orders" };
-  }
-};
-
-export const editOrder = async (
-  values: z.infer<typeof orderFormSchema> & { id: string }
-) => {
-  const currentUser = await auth();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
-  const storeByUserId = await prisma.store.findFirst({
-    where: {
-      id: values.storeId,
-      userId: currentUser.user?.id,
-    },
-  });
-
-  if (!storeByUserId) {
-    return {
-      success: false,
-      message: "Unauthorized access",
-      error: "Unauthorized",
-    };
-  }
-
-  try {
-    await prisma.order.updateMany({
-      where: {
-        id: values.id,
-        storeId: values.storeId,
-      },
-      data: {
-        label: values.label,
-        imageUrl: values.imageUrl,
-      },
-    });
-
-    return { success: true, message: `Successfully updated the order` };
-  } catch (error) {
-    console.log("Can't update the order", error);
-    return { success: false, message: "Failed to update order" };
   }
 };
 
