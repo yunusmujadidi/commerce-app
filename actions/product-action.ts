@@ -3,7 +3,6 @@
 import { auth } from "@/auth";
 import { productFormSchema } from "@/components/form/product-form";
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 export const createProducts = async (
   values: z.infer<typeof productFormSchema>
@@ -309,7 +308,6 @@ export const featuredToogle = async ({
       isFeatured: !isFeatured,
     },
   });
-  revalidatePath(`/dashboard/${storeId}/products`);
 };
 
 export const archivedToogle = async ({
@@ -349,5 +347,4 @@ export const archivedToogle = async ({
       isArchived: !isArchived,
     },
   });
-  revalidatePath(`/dashboard/${storeId}/products`);
 };
