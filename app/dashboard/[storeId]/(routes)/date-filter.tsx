@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { format, subDays } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -57,40 +57,42 @@ export const DateFilter = () => {
   };
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button disabled={false} size="sm" variant="outline">
-          <span>
-            {formatDateRange({
-              period: { from: paramState.from, to: paramState.to },
-            })}
-          </span>
-          <ChevronDown className="ml-2 size-4 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="lg:w-auto w-full p-0" align="start">
-        <Calendar
-          disabled={false}
-          initialFocus
-          mode="range"
-          defaultMonth={date?.from}
-          selected={date}
-          onSelect={setDate}
-          numberOfMonths={2}
-        />
-        <div className="p-4 w-full flex items-center gap-x-2">
-          <PopoverClose asChild>
-            <Button onClick={onReset} className="w-full" variant="outline">
-              Reset
-            </Button>
-          </PopoverClose>
-          <PopoverClose asChild>
-            <Button onClick={() => pushToUrl(date)} className="w-full">
-              Apply
-            </Button>
-          </PopoverClose>
-        </div>
-      </PopoverContent>
-    </Popover>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button disabled={false} size="sm" variant="outline">
+            <span>
+              {formatDateRange({
+                period: { from: paramState.from, to: paramState.to },
+              })}
+            </span>
+            <ChevronDown className="ml-2 size-4 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="lg:w-auto w-full p-0" align="start">
+          <Calendar
+            disabled={false}
+            initialFocus
+            mode="range"
+            defaultMonth={date?.from}
+            selected={date}
+            onSelect={setDate}
+            numberOfMonths={2}
+          />
+          <div className="p-4 w-full flex items-center gap-x-2">
+            <PopoverClose asChild>
+              <Button onClick={onReset} className="w-full" variant="outline">
+                Reset
+              </Button>
+            </PopoverClose>
+            <PopoverClose asChild>
+              <Button onClick={() => pushToUrl(date)} className="w-full">
+                Apply
+              </Button>
+            </PopoverClose>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </Suspense>
   );
 };

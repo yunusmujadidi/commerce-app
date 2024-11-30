@@ -109,7 +109,6 @@ export const ProductForm = ({ initialData, SelectProps }: ProductFormProps) => {
   };
 
   const onSubmit = (values: z.infer<typeof productFormSchema>) => {
-    console.log("Form values with images:", values.images);
     if (initialData) {
       onEditSubmit(values);
     } else {
@@ -118,17 +117,8 @@ export const ProductForm = ({ initialData, SelectProps }: ProductFormProps) => {
   };
   const onCreateSubmit = async (values: z.infer<typeof productFormSchema>) => {
     try {
-      console.log("Creating product with values:", values);
-      console.log("Number of images:", values.images.length);
-      console.log(
-        "Image URLs:",
-        values.images.map((img) => img.url)
-      );
-
       setLoading1(true);
       const result = await createProducts(values);
-
-      console.log("Create product result:", result);
 
       if (result.success) {
         router.refresh();
@@ -353,11 +343,6 @@ export const ProductForm = ({ initialData, SelectProps }: ProductFormProps) => {
                           if (!exists) {
                             field.onChange([...field.value, { url }]);
                           }
-                          // Log the updated array for debugging
-                          console.log("Current image array:", [
-                            ...field.value,
-                            { url },
-                          ]);
                         }
                       }}
                       onRemove={(url) => {
@@ -365,11 +350,6 @@ export const ProductForm = ({ initialData, SelectProps }: ProductFormProps) => {
                           (current) => current.url !== url
                         );
                         field.onChange(filteredImages);
-                        // Log the updated array after removal
-                        console.log(
-                          "Updated image array after removal:",
-                          filteredImages
-                        );
                       }}
                     />
                   </FormControl>

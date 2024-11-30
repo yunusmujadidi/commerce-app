@@ -1,17 +1,16 @@
 "use client";
 
 import { formatPrice } from "@/lib/utils";
-import { Color, Product, Size } from "@prisma/client";
 import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
+import { Products } from "@/lib/types";
 
-interface InfoProps extends Product {
-  size: Size;
-  color: Color;
+interface InfoProps {
+  product: Products;
 }
 
-export const Info = ({ product }: { product: InfoProps }) => {
+export const Info = ({ product }: InfoProps) => {
   const { addItem } = useCart();
   return (
     <div>
@@ -39,7 +38,7 @@ export const Info = ({ product }: { product: InfoProps }) => {
         <Button
           className="rounded-full flex items-center gap-x-2 hover:opacity-90"
           onClick={() => {
-            addItem(product);
+            addItem(product as Products);
           }}
         >
           Add to cart <ShoppingCart />

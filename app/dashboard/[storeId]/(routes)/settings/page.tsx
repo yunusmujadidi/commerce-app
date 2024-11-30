@@ -3,13 +3,11 @@ import { getStore } from "@/actions/store-action";
 import { redirect } from "next/navigation";
 
 interface SettingsPageProps {
-  params: {
-    storeId: string;
-  };
+  params: Promise<{ storeId: string }>;
 }
 
 const SettingsPage = async ({ params }: SettingsPageProps) => {
-  const store = await getStore({ storeId: params.storeId });
+  const store = await getStore({ storeId: (await params).storeId });
   if (!store) {
     redirect("/dashboard");
   }

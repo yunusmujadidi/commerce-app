@@ -34,7 +34,6 @@ const DashboardPage = async ({ params, searchParams }: DashboardPageProps) => {
   const chartData = await getDashboardChart({
     storeId: (await params).storeId,
   });
-  console.log(chartData);
   return (
     <div className="py-6 px-8 ">
       <div className="flex justify-between">
