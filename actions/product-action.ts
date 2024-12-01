@@ -173,11 +173,6 @@ export const editProducts = async (
 };
 
 export const getProducts = async (storeId: string) => {
-  const currentUser = await auth();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
-
   return unstable_cache(
     async () => {
       return prisma.product.findMany({
@@ -198,24 +193,107 @@ export const getProducts = async (storeId: string) => {
   )();
 };
 
-export const getProduct = async ({ productsId }: { productsId: string }) => {
-  const currentUser = await auth();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
+export const getProductsSuggest = async (
+  productId: string,
+  categoryId: string
+) => {
+  return unstable_cache(
+    async () => {
+      return prisma.product.findMany({
+        where: {
+          categoryId: categoryId,
+          id: { not: productId },
+        },
+        include: {
+          images: true,
+          category: true,
+          color: true,
+          size: true,
+        },
+        take: 4,
+      });
+    },
+    [`${CACHE_TAG_PRODUCTS}-${productId}`],
+    {
+      tags: [CACHE_TAG_PRODUCTS, `store-${productId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
+};
 
-  try {
-    const result = await prisma.product.findUnique({
-      where: {
-        id: productsId,
-      },
-    });
+export const getProductsFilter = async (
+  categoryId: string,
+  colorId?: string,
+  sizeId?: string
+) => {
+  return unstable_cache(
+    async () => {
+      return prisma.product.findMany({
+        where: {
+          categoryId: categoryId,
+          colorId: colorId,
+          sizeId: sizeId,
+        },
+        include: {
+          images: true,
+          category: true,
+          color: true,
+          size: true,
+        },
+      });
+    },
+    [`${CACHE_TAG_PRODUCTS}-Filter`],
+    {
+      tags: [CACHE_TAG_PRODUCTS, `Filter`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
+};
 
-    return { success: true, result };
-  } catch (error) {
-    console.log("Can't fetch products", error);
-    return { success: false, error: "Failed to fetch products" };
-  }
+export const getProductsMainPage = async (storeId?: string) => {
+  return unstable_cache(
+    async () => {
+      return prisma.product.findMany({
+        where: {
+          isFeatured: true,
+        },
+        include: {
+          images: true,
+          category: true,
+          color: true,
+          size: true,
+        },
+      });
+    },
+    [`${CACHE_TAG_PRODUCTS}-${storeId}`],
+    {
+      tags: [CACHE_TAG_PRODUCTS, `store-${storeId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
+};
+
+export const getProduct = async (productId: string) => {
+  return unstable_cache(
+    async () => {
+      return prisma.product.findUnique({
+        where: {
+          id: productId,
+        },
+        include: {
+          images: true,
+          category: true,
+          color: true,
+          size: true,
+        },
+      });
+    },
+    [`${CACHE_TAG_PRODUCTS}-${productId}`],
+    {
+      tags: [CACHE_TAG_PRODUCTS, `product-${productId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 };
 
 export const deleteProducts = async ({

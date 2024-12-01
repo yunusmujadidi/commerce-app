@@ -52,12 +52,7 @@ export const createBillboard = async (
   }
 };
 
-export const getBillboards = async (storeId: string) => {
-  const currentUser = await auth();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
-
+export const getBillboards = async (storeId?: string) => {
   return unstable_cache(
     async () => {
       return prisma.billboard.findMany({
@@ -158,4 +153,20 @@ export const deleteBillboards = async ({
     console.log("Cant delete the billboard", error);
     return { success: false, message: "Failed to delete the billboards" };
   }
+};
+
+export const getBillboard = async (storeId?: string) => {
+  return unstable_cache(
+    async () => {
+      return prisma.billboard.findFirst({
+        where: { storeId },
+        orderBy: { createdAt: "desc" },
+      });
+    },
+    [`${CACHE_TAG_BILLBOARDS}-${storeId}`],
+    {
+      tags: [CACHE_TAG_BILLBOARDS, `store-${storeId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 };

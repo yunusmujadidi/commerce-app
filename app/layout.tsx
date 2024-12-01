@@ -42,5 +42,5 @@ export default function RootLayout({
 }
 
 // TODO: restyle the data table
-// TODO: dynamic caching on next js 15 "use cache" V done
+// TODO: dynamic caching on next js 15 "use cache" V done in dashboard
 // TODO: fix the featured products action

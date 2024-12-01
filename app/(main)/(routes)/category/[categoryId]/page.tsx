@@ -1,9 +1,11 @@
+import { getCategory } from "@/actions/category-action";
+import { getProductsFilter } from "@/actions/product-action";
+import { getStoreWithDetails } from "@/actions/store-action";
 import { Billboard } from "@/components/billboard";
 import { Filter } from "@/components/filter";
 import { MobileFilter } from "@/components/mobile-filter";
 import { NoResult } from "@/components/no-result";
 import { ProductCard } from "@/components/product-card";
-import { prisma } from "@/lib/prisma";
 
 const CategoryPage = async ({
   params,
@@ -12,35 +14,15 @@ const CategoryPage = async ({
   params: Promise<{ categoryId: string }>;
   searchParams: Promise<{ colorId?: string; sizeId?: string }>;
 }) => {
-  const category = await prisma.category.findUnique({
-    where: {
-      id: (await params).categoryId,
-    },
-    include: {
-      billboard: true,
-    },
-  });
+  const { categoryId } = await params;
+  const { colorId } = await searchParams;
+  const { sizeId } = await searchParams;
 
-  const store = await prisma.store.findFirst({
-    include: {
-      sizes: true,
-      colors: true,
-    },
-  });
+  const category = await getCategory(categoryId);
 
-  const products = await prisma.product.findMany({
-    where: {
-      categoryId: (await params).categoryId,
-      colorId: (await searchParams).colorId,
-      sizeId: (await searchParams).sizeId,
-    },
-    include: {
-      images: true,
-      category: true,
-      color: true,
-      size: true,
-    },
-  });
+  const store = await getStoreWithDetails(categoryId);
+
+  const products = await getProductsFilter(categoryId, sizeId, colorId);
 
   if (!store || !category || !products) {
     return <NoResult />;

@@ -48,15 +48,10 @@ export const createCategory = async (
   }
 };
 
-export const getCategories = async (storeId: string) => {
-  const currentUser = await auth();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
-
+export const getCategories = async (storeId?: string) => {
   return unstable_cache(
     async () => {
-      return prisma.category.findMany({
+      return await prisma.category.findMany({
         where: { storeId },
         include: { billboard: true },
         orderBy: { createdAt: "desc" },
@@ -69,6 +64,27 @@ export const getCategories = async (storeId: string) => {
     }
   )();
 };
+
+export const getCategory = async (categoryId: string) => {
+  return unstable_cache(
+    async () => {
+      return await prisma.category.findUnique({
+        where: {
+          id: categoryId,
+        },
+        include: {
+          billboard: true,
+        },
+      });
+    },
+    [`${CACHE_TAG_CATEGORIES}`],
+    {
+      tags: [CACHE_TAG_CATEGORIES],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
+};
+
 export const editCategory = async (
   values: z.infer<typeof categoryFormSchema> & { id: string }
 ) => {

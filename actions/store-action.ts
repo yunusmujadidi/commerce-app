@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
 export const createStore = async (values: { name: string }) => {
   const currentUser = await auth();
@@ -112,3 +113,24 @@ export const deleteStores = async ({ storeId }: { storeId: string }) => {
     return { success: false, message: "Failed to delete the stores" };
   }
 };
+
+export const getStoreWithDetails = unstable_cache(
+  async (categoryId: string) => {
+    const store = await prisma.store.findFirst({
+      where: {
+        categories: {
+          some: {
+            id: categoryId,
+          },
+        },
+      },
+      include: {
+        sizes: true,
+        colors: true,
+      },
+    });
+
+    return store;
+  },
+  ["store"]
+);

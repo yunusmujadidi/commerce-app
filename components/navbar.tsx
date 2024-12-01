@@ -1,9 +1,10 @@
-import { Category } from "@prisma/client";
 import Link from "next/link";
 import { MainNav } from "./main-nav";
 import { NavbarActions } from "./navbar-actions";
+import { getCategories } from "@/actions/category-action";
 
-export const Navbar = ({ categories }: { categories: Category[] }) => {
+export const Navbar = async () => {
+  const categories = await getCategories();
   return (
     <div className="border-b">
       <div className="max-w-7xl mx-auto">
