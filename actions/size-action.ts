@@ -4,6 +4,9 @@ import { auth } from "@/auth";
 import { sizeFormSchema } from "@/components/form/size-form";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { unstable_cache, revalidatePath } from "next/cache";
+
+const CACHE_TAG_SIZES = "sizes";
 
 export const createSize = async (values: z.infer<typeof sizeFormSchema>) => {
   const currentUser = await auth();
@@ -35,7 +38,8 @@ export const createSize = async (values: z.infer<typeof sizeFormSchema>) => {
       data: values,
     });
 
-    return { success: true, message: "Size created succesfully!", result };
+    revalidatePath(`/dashboard/${values.storeId}/sizes`);
+    return { success: true, message: "Size created successfully!", result };
   } catch (error) {
     console.log("Can't create size", error);
     return { success: false, error: "Failed to create size" };
@@ -48,16 +52,19 @@ export const getSizes = async (storeId: string) => {
     throw new Error("Unauthorized");
   }
 
-  const result = await prisma.size.findMany({
-    where: {
-      storeId,
+  return unstable_cache(
+    async () => {
+      return prisma.size.findMany({
+        where: { storeId },
+        orderBy: { createdAt: "desc" },
+      });
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return result;
+    [`${CACHE_TAG_SIZES}-${storeId}`],
+    {
+      tags: [CACHE_TAG_SIZES, `store-${storeId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 };
 
 export const getSize = async ({ sizesId }: { sizesId: string }) => {
@@ -113,6 +120,7 @@ export const editSizes = async (
       },
     });
 
+    revalidatePath(`/dashboard/${values.storeId}/sizes`);
     return { success: true, message: `Successfully updated the sizes` };
   } catch (error) {
     console.log("Can't update the sizes", error);
@@ -154,11 +162,12 @@ export const deleteSizes = async ({
       },
     });
 
+    revalidatePath(`/dashboard/${storeId}/sizes`);
     return {
-      sucess: true,
-      message: `Success deleted ${result.count} ${
-        result.count < 0 ? "sizes" : "size"
-      } `,
+      success: true,
+      message: `Successfully deleted ${result.count} ${
+        result.count > 1 ? "sizes" : "size"
+      }`,
     };
   } catch (error) {
     console.log("Cant delete the sizes", error);

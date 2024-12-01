@@ -4,6 +4,9 @@ import { auth } from "@/auth";
 import { categoryFormSchema } from "@/components/form/category-form";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { unstable_cache, revalidatePath } from "next/cache";
+
+const CACHE_TAG_CATEGORIES = "categories";
 
 export const createCategory = async (
   values: z.infer<typeof categoryFormSchema>
@@ -37,7 +40,8 @@ export const createCategory = async (
       data: values,
     });
 
-    return { success: true, message: "Category created succesfully!", result };
+    revalidatePath(`/dashboard/${values.storeId}/categories`);
+    return { success: true, message: "Category created successfully!", result };
   } catch (error) {
     console.log("Can't create category", error);
     return { success: false, error: "Failed to create category" };
@@ -50,36 +54,21 @@ export const getCategories = async (storeId: string) => {
     throw new Error("Unauthorized");
   }
 
-  const result = await prisma.category.findMany({
-    where: {
-      storeId,
+  return unstable_cache(
+    async () => {
+      return prisma.category.findMany({
+        where: { storeId },
+        include: { billboard: true },
+        orderBy: { createdAt: "desc" },
+      });
     },
-    include: {
-      billboard: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return result;
+    [`${CACHE_TAG_CATEGORIES}-${storeId}`],
+    {
+      tags: [CACHE_TAG_CATEGORIES, `store-${storeId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 };
-
-export const getCategory = async ({ categoryId }: { categoryId: string }) => {
-  const currentUser = await auth();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
-
-  const result = await prisma.category.findUnique({
-    where: {
-      id: categoryId,
-    },
-  });
-
-  return result;
-};
-
 export const editCategory = async (
   values: z.infer<typeof categoryFormSchema> & { id: string }
 ) => {
@@ -113,6 +102,7 @@ export const editCategory = async (
       },
     });
 
+    revalidatePath(`/dashboard/${values.storeId}/categories`);
     return { success: true, message: `Successfully updated the category` };
   } catch (error) {
     console.log("Can't update the category", error);
@@ -154,9 +144,10 @@ export const deleteCategories = async ({
       },
     });
 
+    revalidatePath(`/dashboard/${storeId}/categories`);
     return {
-      sucess: true,
-      message: `Success deleted ${result.count} categories `,
+      success: true,
+      message: `Successfully deleted ${result.count} categories`,
     };
   } catch (error) {
     console.log("Cant delete the category", error);

@@ -4,6 +4,10 @@ import { auth } from "@/auth";
 import { productFormSchema } from "@/components/form/product-form";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { unstable_cache, revalidatePath } from "next/cache";
+
+const CACHE_TAG_PRODUCTS = "products";
+
 export const createProducts = async (
   values: z.infer<typeof productFormSchema>
 ) => {
@@ -83,6 +87,7 @@ export const createProducts = async (
       return completeProduct;
     });
 
+    revalidatePath(`/dashboard/${values.storeId}/products`);
     return {
       success: true,
       message: "Product created successfully!",
@@ -151,6 +156,7 @@ export const editProducts = async (
       include: { images: true },
     });
 
+    revalidatePath(`/dashboard/${values.storeId}/products`);
     return {
       success: true,
       message: "Product updated successfully!",
@@ -172,37 +178,24 @@ export const getProducts = async (storeId: string) => {
     throw new Error("Unauthorized");
   }
 
-  const result = await prisma.product.findMany({
-    where: {
-      storeId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      size: {
-        select: {
-          id: true,
-          name: true,
+  return unstable_cache(
+    async () => {
+      return prisma.product.findMany({
+        where: { storeId },
+        orderBy: { createdAt: "desc" },
+        include: {
+          size: { select: { id: true, name: true } },
+          color: { select: { id: true, name: true, value: true } },
+          category: { select: { id: true, name: true } },
         },
-      },
-      color: {
-        select: {
-          id: true,
-          name: true,
-          value: true,
-        },
-      },
-      category: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+      });
     },
-  });
-
-  return result;
+    [`${CACHE_TAG_PRODUCTS}-${storeId}`],
+    {
+      tags: [CACHE_TAG_PRODUCTS, `store-${storeId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 };
 
 export const getProduct = async ({ productsId }: { productsId: string }) => {
@@ -259,11 +252,12 @@ export const deleteProducts = async ({
       },
     });
 
+    revalidatePath(`/dashboard/${storeId}/products`);
     return {
-      sucess: true,
-      message: `Success deleted ${result.count} ${
-        result.count < 0 ? "products" : "product"
-      } `,
+      success: true,
+      message: `Successfully deleted ${result.count} ${
+        result.count === 1 ? "product" : "products"
+      }`,
     };
   } catch (error) {
     console.log("Cant delete the products", error);
@@ -299,15 +293,22 @@ export const featuredToogle = async ({
       error: "Unauthorized",
     };
   }
-  await prisma.product.updateMany({
-    where: {
-      id,
-      storeId,
-    },
-    data: {
-      isFeatured: !isFeatured,
-    },
-  });
+
+  try {
+    await prisma.product.updateMany({
+      where: { id, storeId },
+      data: { isFeatured: !isFeatured },
+    });
+
+    revalidatePath(`/dashboard/${storeId}/products`);
+    return { success: true, message: "Featured status updated successfully" };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to update featured status",
+      error,
+    };
+  }
 };
 
 export const archivedToogle = async ({
@@ -338,13 +339,20 @@ export const archivedToogle = async ({
       error: "Unauthorized",
     };
   }
-  await prisma.product.updateMany({
-    where: {
-      id,
-      storeId,
-    },
-    data: {
-      isArchived: !isArchived,
-    },
-  });
+
+  try {
+    await prisma.product.updateMany({
+      where: { id, storeId },
+      data: { isArchived: !isArchived },
+    });
+
+    revalidatePath(`/dashboard/${storeId}/products`);
+    return { success: true, message: "Archive status updated successfully" };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to update archive status",
+      error,
+    };
+  }
 };

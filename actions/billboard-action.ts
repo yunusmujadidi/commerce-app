@@ -4,6 +4,9 @@ import { auth } from "@/auth";
 import { billboardFormSchema } from "@/components/form/billlboards-form";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { unstable_cache, revalidatePath } from "next/cache";
+
+const CACHE_TAG_BILLBOARDS = "billboards";
 
 export const createBillboard = async (
   values: z.infer<typeof billboardFormSchema>
@@ -37,7 +40,12 @@ export const createBillboard = async (
       data: values,
     });
 
-    return { success: true, message: "Billboard created succesfully!", result };
+    revalidatePath(`/dashboard/${values.storeId}/billboards`);
+    return {
+      success: true,
+      message: "Billboard created successfully!",
+      result,
+    };
   } catch (error) {
     console.log("Can't create billboard", error);
     return { success: false, error: "Failed to create billboard" };
@@ -50,35 +58,19 @@ export const getBillboards = async (storeId: string) => {
     throw new Error("Unauthorized");
   }
 
-  const result = await prisma.billboard.findMany({
-    where: {
-      storeId,
+  return unstable_cache(
+    async () => {
+      return prisma.billboard.findMany({
+        where: { storeId },
+        orderBy: { createdAt: "desc" },
+      });
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return result;
-};
-
-export const getBillboard = async ({
-  billboardId,
-}: {
-  billboardId: string;
-}) => {
-  const currentUser = await auth();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
-
-  const result = await prisma.billboard.findUnique({
-    where: {
-      id: billboardId,
-    },
-  });
-
-  return result;
+    [`${CACHE_TAG_BILLBOARDS}-${storeId}`],
+    {
+      tags: [CACHE_TAG_BILLBOARDS, `store-${storeId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 };
 
 export const editBillboard = async (
@@ -115,6 +107,7 @@ export const editBillboard = async (
       },
     });
 
+    revalidatePath(`/dashboard/${values.storeId}/billboards`);
     return { success: true, message: `Successfully updated the billboard` };
   } catch (error) {
     console.log("Can't update the billboard", error);
@@ -156,9 +149,10 @@ export const deleteBillboards = async ({
       },
     });
 
+    revalidatePath(`/dashboard/${storeId}/billboards`);
     return {
-      sucess: true,
-      message: `Success deleted ${result.count} billboards `,
+      success: true,
+      message: `Successfully deleted ${result.count} billboards`,
     };
   } catch (error) {
     console.log("Cant delete the billboard", error);

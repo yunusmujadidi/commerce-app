@@ -4,6 +4,9 @@ import { auth } from "@/auth";
 import { colorFormSchema } from "@/components/form/color-form";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { unstable_cache, revalidatePath } from "next/cache";
+
+const CACHE_TAG_COLORS = "colors";
 
 export const createColor = async (values: z.infer<typeof colorFormSchema>) => {
   const currentUser = await auth();
@@ -35,7 +38,8 @@ export const createColor = async (values: z.infer<typeof colorFormSchema>) => {
       data: values,
     });
 
-    return { success: true, message: "Color created succesfully!", result };
+    revalidatePath(`/dashboard/${values.storeId}/colors`);
+    return { success: true, message: "Color created successfully!", result };
   } catch (error) {
     console.log("Can't create color", error);
     return { success: false, error: "Failed to create color" };
@@ -48,16 +52,19 @@ export const getColors = async (storeId: string) => {
     throw new Error("Unauthorized");
   }
 
-  const result = await prisma.color.findMany({
-    where: {
-      storeId,
+  return unstable_cache(
+    async () => {
+      return prisma.color.findMany({
+        where: { storeId },
+        orderBy: { createdAt: "desc" },
+      });
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return result;
+    [`${CACHE_TAG_COLORS}-${storeId}`],
+    {
+      tags: [CACHE_TAG_COLORS, `store-${storeId}`],
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 };
 
 export const getColor = async ({ colorsId }: { colorsId: string }) => {
@@ -113,6 +120,7 @@ export const editColors = async (
       },
     });
 
+    revalidatePath(`/dashboard/${values.storeId}/colors`);
     return { success: true, message: `Successfully updated the colors` };
   } catch (error) {
     console.log("Can't update the colors", error);
@@ -154,11 +162,12 @@ export const deleteColors = async ({
       },
     });
 
+    revalidatePath(`/dashboard/${storeId}/colors`);
     return {
-      sucess: true,
-      message: `Success deleted ${result.count} ${
+      success: true,
+      message: `Successfully deleted ${result.count} ${
         result.count < 0 ? "colors" : "color"
-      } `,
+      }`,
     };
   } catch (error) {
     console.log("Cant delete the colors", error);
