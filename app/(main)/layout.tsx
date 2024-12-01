@@ -13,7 +13,6 @@ export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
-  params: { categoryId: string };
 }) {
   return (
     <main
