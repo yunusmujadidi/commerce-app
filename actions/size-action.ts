@@ -38,7 +38,7 @@ export const createSize = async (values: z.infer<typeof sizeFormSchema>) => {
       data: values,
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/sizes`);
+    revalidatePath("/");
     return { success: true, message: "Size created successfully!", result };
   } catch (error) {
     console.log("Can't create size", error);
@@ -120,7 +120,7 @@ export const editSizes = async (
       },
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/sizes`);
+    revalidatePath("/");
     return { success: true, message: `Successfully updated the sizes` };
   } catch (error) {
     console.log("Can't update the sizes", error);
@@ -162,7 +162,7 @@ export const deleteSizes = async ({
       },
     });
 
-    revalidatePath(`/dashboard/${storeId}/sizes`);
+    revalidatePath("/");
     return {
       success: true,
       message: `Successfully deleted ${result.count} ${

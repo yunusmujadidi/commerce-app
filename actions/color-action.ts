@@ -38,7 +38,7 @@ export const createColor = async (values: z.infer<typeof colorFormSchema>) => {
       data: values,
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/colors`);
+    revalidatePath("/");
     return { success: true, message: "Color created successfully!", result };
   } catch (error) {
     console.log("Can't create color", error);
@@ -120,7 +120,7 @@ export const editColors = async (
       },
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/colors`);
+    revalidatePath("/");
     return { success: true, message: `Successfully updated the colors` };
   } catch (error) {
     console.log("Can't update the colors", error);
@@ -162,7 +162,7 @@ export const deleteColors = async ({
       },
     });
 
-    revalidatePath(`/dashboard/${storeId}/colors`);
+    revalidatePath("/");
     return {
       success: true,
       message: `Successfully deleted ${result.count} ${

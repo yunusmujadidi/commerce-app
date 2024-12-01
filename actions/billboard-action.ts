@@ -40,7 +40,7 @@ export const createBillboard = async (
       data: values,
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/billboards`);
+    revalidatePath("/");
     return {
       success: true,
       message: "Billboard created successfully!",
@@ -102,7 +102,7 @@ export const editBillboard = async (
       },
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/billboards`);
+    revalidatePath("/");
     return { success: true, message: `Successfully updated the billboard` };
   } catch (error) {
     console.log("Can't update the billboard", error);
@@ -144,7 +144,7 @@ export const deleteBillboards = async ({
       },
     });
 
-    revalidatePath(`/dashboard/${storeId}/billboards`);
+    revalidatePath("/");
     return {
       success: true,
       message: `Successfully deleted ${result.count} billboards`,

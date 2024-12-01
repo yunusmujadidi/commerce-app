@@ -40,7 +40,7 @@ export const createCategory = async (
       data: values,
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/categories`);
+    revalidatePath("/");
     return { success: true, message: "Category created successfully!", result };
   } catch (error) {
     console.log("Can't create category", error);
@@ -118,7 +118,7 @@ export const editCategory = async (
       },
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/categories`);
+    revalidatePath("/");
     return { success: true, message: `Successfully updated the category` };
   } catch (error) {
     console.log("Can't update the category", error);
@@ -160,7 +160,7 @@ export const deleteCategories = async ({
       },
     });
 
-    revalidatePath(`/dashboard/${storeId}/categories`);
+    revalidatePath("/");
     return {
       success: true,
       message: `Successfully deleted ${result.count} categories`,

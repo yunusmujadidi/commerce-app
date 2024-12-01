@@ -87,7 +87,7 @@ export const createProducts = async (
       return completeProduct;
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/products`);
+    revalidatePath("/");
     return {
       success: true,
       message: "Product created successfully!",
@@ -156,7 +156,7 @@ export const editProducts = async (
       include: { images: true },
     });
 
-    revalidatePath(`/dashboard/${values.storeId}/products`);
+    revalidatePath("/");
     return {
       success: true,
       message: "Product updated successfully!",
@@ -330,7 +330,7 @@ export const deleteProducts = async ({
       },
     });
 
-    revalidatePath(`/dashboard/${storeId}/products`);
+    revalidatePath("/");
     return {
       success: true,
       message: `Successfully deleted ${result.count} ${
@@ -378,7 +378,7 @@ export const featuredToogle = async ({
       data: { isFeatured: !isFeatured },
     });
 
-    revalidatePath(`/dashboard/${storeId}/products`);
+    revalidatePath("/");
     return { success: true, message: "Featured status updated successfully" };
   } catch (error) {
     return {
@@ -424,7 +424,7 @@ export const archivedToogle = async ({
       data: { isArchived: !isArchived },
     });
 
-    revalidatePath(`/dashboard/${storeId}/products`);
+    revalidatePath("/");
     return { success: true, message: "Archive status updated successfully" };
   } catch (error) {
     return {
