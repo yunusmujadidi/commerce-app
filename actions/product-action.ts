@@ -225,31 +225,31 @@ export const getProductsFilter = async (
   sizeId?: string,
   colorId?: string
 ) => {
-  const whereClause: {
-    categoryId: string;
-    colorId?: string;
-    sizeId?: string;
-  } = {
-    categoryId: categoryId,
-  };
+  const result = await unstable_cache(
+    async () =>
+      prisma.product.findMany({
+        where: {
+          categoryId,
+          ...(sizeId && { sizeId }),
+          ...(colorId && { colorId }),
+          isArchived: false,
+        },
+        include: {
+          images: true,
+          category: true,
+          color: true,
+          size: true,
+        },
+      }),
+    [`products-filter-${categoryId}-${sizeId}-${colorId}`],
+    {
+      revalidate: 3600, // Cache for 1 hour
+    }
+  )();
 
-  if (colorId) {
-    whereClause.colorId = colorId;
-  }
-  if (sizeId) {
-    whereClause.sizeId = sizeId;
-  }
-
-  return prisma.product.findMany({
-    where: { ...whereClause, isArchived: false },
-    include: {
-      images: true,
-      category: true,
-      color: true,
-      size: true,
-    },
-  });
+  return result;
 };
+
 export const getProductsMainPage = async (storeId?: string) => {
   return unstable_cache(
     async () => {
