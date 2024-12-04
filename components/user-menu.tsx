@@ -20,10 +20,16 @@ import {
 import { User } from "@prisma/client";
 import { signOut } from "next-auth/react";
 import { getInitials } from "@/lib/utils";
+import { clearCache } from "@/lib/clear-cache";
 
 export const UserMenu = ({ user }: { user: User | undefined }) => {
   const { isMobile } = useSidebar();
   const { setTheme } = useTheme();
+
+  const handleSignOut = () => {
+    clearCache();
+    signOut();
+  };
 
   return (
     <SidebarMenu>
@@ -81,7 +87,11 @@ export const UserMenu = ({ user }: { user: User | undefined }) => {
               System
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem
+              onClick={() => {
+                handleSignOut();
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

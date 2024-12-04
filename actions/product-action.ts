@@ -220,36 +220,36 @@ export const getProductsSuggest = async (
     }
   )();
 };
-
 export const getProductsFilter = async (
   categoryId: string,
-  colorId?: string,
-  sizeId?: string
+  sizeId?: string,
+  colorId?: string
 ) => {
-  return unstable_cache(
-    async () => {
-      return prisma.product.findMany({
-        where: {
-          categoryId: categoryId,
-          colorId: colorId,
-          sizeId: sizeId,
-        },
-        include: {
-          images: true,
-          category: true,
-          color: true,
-          size: true,
-        },
-      });
-    },
-    [`${CACHE_TAG_PRODUCTS}-Filter`],
-    {
-      tags: [CACHE_TAG_PRODUCTS, `Filter`],
-      revalidate: 3600, // Cache for 1 hour
-    }
-  )();
-};
+  const whereClause: {
+    categoryId: string;
+    colorId?: string;
+    sizeId?: string;
+  } = {
+    categoryId: categoryId,
+  };
 
+  if (colorId) {
+    whereClause.colorId = colorId;
+  }
+  if (sizeId) {
+    whereClause.sizeId = sizeId;
+  }
+
+  return prisma.product.findMany({
+    where: { ...whereClause, isArchived: false },
+    include: {
+      images: true,
+      category: true,
+      color: true,
+      size: true,
+    },
+  });
+};
 export const getProductsMainPage = async (storeId?: string) => {
   return unstable_cache(
     async () => {

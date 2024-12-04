@@ -84,6 +84,16 @@ export const getCategory = async (categoryId: string) => {
     }
   )();
 };
+export const getCategoryPage = async (categoryId: string) => {
+  return await prisma.category.findUnique({
+    where: {
+      id: categoryId,
+    },
+    include: {
+      billboard: true,
+    },
+  });
+};
 
 export const editCategory = async (
   values: z.infer<typeof categoryFormSchema> & { id: string }

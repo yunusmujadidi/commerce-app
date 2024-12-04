@@ -1,4 +1,4 @@
-import { getCategory } from "@/actions/category-action";
+import { getCategoryPage } from "@/actions/category-action";
 import { getProductsFilter } from "@/actions/product-action";
 import { getStoreWithDetails } from "@/actions/store-action";
 import { Billboard } from "@/components/billboard";
@@ -18,15 +18,16 @@ const CategoryPage = async ({
   const { colorId } = await searchParams;
   const { sizeId } = await searchParams;
 
-  const category = await getCategory(categoryId);
+  const category = await getCategoryPage(categoryId);
 
   const store = await getStoreWithDetails(categoryId);
 
   const products = await getProductsFilter(categoryId, sizeId, colorId);
 
-  if (!store || !category || !products) {
-    return <NoResult />;
+  if (!category || !store) {
+    return;
   }
+
   return (
     <div className="space-y-8">
       <Billboard data={category?.billboard} />
